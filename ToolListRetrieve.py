@@ -58,3 +58,5 @@ while i < len(pliki):
     i += 1
 
 print("-done in %s seconds-" % (time.time() - start_time))
+
+#sex ma sie dodać do dev i pullnąć ręcznie do maina
