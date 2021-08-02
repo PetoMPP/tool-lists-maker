@@ -1,8 +1,17 @@
 import time
 import re
-from os import listdir, name
+from os import listdir, name, walk
 from os.path import isfile, join
 start_time = time.time()
+
+#Pobranie listy folderów z programami
+def getDir(path):
+    dirlist = []
+    for (dirpath, dirnames, filenames) in walk(path):
+        dirlist.extend(dirnames)
+    return dirlist
+
+print(getDir("../ToolLists/NC_Programs"))
 
 #Pobranie listy programów (Działa)
 def getfiles(path):
@@ -26,14 +35,14 @@ def findTnums(line):
 
 #Stworzenie listy narzędzi z pliku (Działa)
 def makeTlist(NCP):
-    ncprg = open("../Axito/NC_Programs/"+NCP)
+    ncprg = open("../ToolLists/NC_Programs/"+NCP)
     tlist = []
     for line in ncprg.readlines():
         tlist.extend(findTnums(line))
     return tlist
 
 #Zasada działania: Krok 1 odczytać wszystkie pliki
-pliki = getfiles("../Axito/NC_Programs")
+pliki = getfiles("../ToolLists/NC_Programs")
 
 #Stworznienie plików do listy narzędzi
 createlist(pliki)
