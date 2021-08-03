@@ -11,9 +11,12 @@ pliki = dirmod.getfiles("../NC_Programs")
 dirmod.createlist(pliki)
 
 #W jednym poleceniu musi być zgarnięcie numerów T i wpisanie ich do plików
+
+#NCpath = input("Podaj ścieżkę do folderu z programami")
+NCpath = 
 i = 0
 while i < len(pliki):
-    tlist = toolgetmod.fileTlist(pliki[i])
+    tlist = toolgetmod.fileTlist(pliki[i],NCpath)
     tfile = open("ToolList"+pliki[i]+".txt", "a")
     j = 0
     while j < len(tlist):

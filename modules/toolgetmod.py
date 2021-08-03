@@ -7,17 +7,19 @@ def findTnums(line):
     return hits
 
 #Stworzenie listy narzędzi z pliku nazwa po pliku (Działa)
-def fileTlist(NCP):
-    ncprg = open("../ToolLists/NC_Programs/"+NCP)
+def fileTlist(NCP, path):
+    ncprg = open(path+NCP)
     tlist = []
     for line in ncprg.readlines():
         tlist.extend(findTnums(line))
+    set(tlist)
     return tlist
 
 #Stworzenie listy narzędzi z pliku nazwa po pliku (Nie działa)
-def dirTlist(NCP):
-    ncprg = open("../ToolLists/NC_Programs/"+NCP)
+def dirTlist(NCP,path):
+    ncprg = open(path+NCP)
     tlist = []
     for line in ncprg.readlines():
         tlist.extend(findTnums(line))
+    set(tlist)
     return tlist
