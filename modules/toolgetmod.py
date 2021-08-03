@@ -6,8 +6,16 @@ def findTnums(line):
     hits = TNumRegex.findall(line)
     return hits
 
-#Stworzenie listy narzędzi z pliku (Działa)
-def makeTlist(NCP):
+#Stworzenie listy narzędzi z pliku nazwa po pliku (Działa)
+def fileTlist(NCP):
+    ncprg = open("../ToolLists/NC_Programs/"+NCP)
+    tlist = []
+    for line in ncprg.readlines():
+        tlist.extend(findTnums(line))
+    return tlist
+
+#Stworzenie listy narzędzi z pliku nazwa po pliku (Nie działa)
+def dirTlist(NCP):
     ncprg = open("../ToolLists/NC_Programs/"+NCP)
     tlist = []
     for line in ncprg.readlines():

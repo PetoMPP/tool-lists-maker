@@ -9,10 +9,11 @@ pliki = dirmod.getfiles("../NC_Programs")
 
 #Stworznienie plików do listy narzędzi
 dirmod.createlist(pliki)
+
 #W jednym poleceniu musi być zgarnięcie numerów T i wpisanie ich do plików
 i = 0
 while i < len(pliki):
-    tlist = toolgetmod.makeTlist(pliki[i])
+    tlist = toolgetmod.fileTlist(pliki[i])
     tfile = open("ToolList"+pliki[i]+".txt", "a")
     j = 0
     while j < len(tlist):
