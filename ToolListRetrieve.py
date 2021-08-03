@@ -11,8 +11,6 @@ def getDir(path):
         dirlist.extend(dirnames)
     return dirlist
 
-print(getDir("../ToolLists/NC_Programs"))
-
 #Pobranie listy programów (Działa)
 def getfiles(path):
     filelist = [file for file in listdir(path) if isfile(join(path,file))]
