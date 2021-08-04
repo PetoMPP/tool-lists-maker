@@ -21,6 +21,6 @@ Scirpt executing all of the above
 adjust the script for files in subfolders
 removing duplicates
 add a switch for looking for files in rootdir or for files in subdirs, or get all files from the dir and subdirs
-adding a gui/a local webpage service
+adding a gui/a local webpage service (Django)
 executing a query for making the list in tdm
 executing a query for inserting the tools in tool list in tdm
