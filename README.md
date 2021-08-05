@@ -20,7 +20,7 @@ removing duplicates
 
 #to be done
 
-
+add an option for user to specify source folder
 add a switch for looking for files in rootdir or for files in subdirs, or get all files from the dir and subdirs
 adding a gui/a local webpage service (Django)
 executing a query for making the list in tdm
