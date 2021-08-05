@@ -32,36 +32,3 @@ while i < len(dirs):
         j += 1
     i += 1
 print("-done in %s seconds-" % (time.time() - start_time))
-
-#Krok 2 Odczytanie ścieżek do plików (Działa)
-i = 0
-NCpaths = []
-while i < len(dirs):
-    NCfiles = dirmod.getfiles(NCpath+"/"+dirs[i])
-    j = 0
-    while j < len(NCfiles):
-        NCpaths.append(dirs[i]+"/"+NCfiles[j])
-        j += 1
-    i += 1
-#print(NCpaths)
-#(Wstrzymane) Zasada działania: Krok 1 odczytać wszystkie pliki
-'''pliki = dirmod.getfiles(NCpath)'''
-
-#Stworznienie plików do listy narzędzi
-
-
-
-#W jednym poleceniu musi być zgarnięcie numerów T i wpisanie ich do plików
-'''
-i = 0
-while i < len(pliki):
-    tlist = toolgetmod.fileTlist(pliki[i],NCpath)
-    tfile = open("ToolList"+pliki[i]+".txt", "a")
-    j = 0
-    while j < len(tlist):
-        tfile.write(tlist[j]+"\n")
-        j += 1      
-    i += 1
-
-print("-done in %s seconds-" % (time.time() - start_time))
-'''
