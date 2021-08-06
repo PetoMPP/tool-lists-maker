@@ -12,7 +12,7 @@ class NCfile:
 
 
 #NCpath = input("Podaj ścieżkę do folderu z programami")
-NCpath = "NC_Programs"
+NCpath = input("Podaj ścieżkę do folderu z programami (np. M:\3_Retransmission")
 
 #Zasada działania: Krok 1 odczytać foldery i pliki z programami (Działa)
 dirs = dirmod.getDir(NCpath) #lista folderów
