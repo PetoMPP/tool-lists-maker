@@ -1,5 +1,5 @@
 #CREATING THE LIST IN THE SYSTEM WITHOUT 'N' PREFIX (UNICODE STRING)
-insert into TDM_LIST
+       insert into TDM_LIST
 
        (LISTID, NCPROGRAM, PARTNAME, PARTNAME01, 
 
@@ -53,7 +53,7 @@ insert into TDM_LIST
 
       ''  )
 #CREATING THE LIST IN THE SYSTEM WITH 'N' PREFIX (UNICODE STRING)
-insert into TDM_LIST
+       insert into TDM_LIST
 
     (TIMESTAMP, LISTID, NCPROGRAM, PARTNAME, PARTNAME01, 
 
@@ -67,7 +67,7 @@ insert into TDM_LIST
 
     USERNAME, ACCESSCODE)
 
-values
+       values
 
     (1628337607, N'0002712'      ,
 
@@ -109,13 +109,13 @@ values
 
 
 #INSERTING LOGFILE DATA
-insert into TMS_CHANGEINFO 
+       insert into TMS_CHANGEINFO 
 
     (TIMESTAMP, TNAME, ID, ID2, ID3, ID4, ID5, 
 
     POS, USERID, NOTE, CHANGEDATE, CHANGETIME, CREATIONTIMESTAMP) 
 
-values (1628337608, N'TDM_LIST', 
+       values (1628337608, N'TDM_LIST', 
 
         N'0002712' , 
 
