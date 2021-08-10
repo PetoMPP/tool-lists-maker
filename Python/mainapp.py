@@ -30,9 +30,9 @@ while i < len(dirs):
         try:
             tlist = toolgetmod.fileTlist(NCpath+"/"+tdir) #lista numerów T w pliku
         except UnicodeDecodeError:
-            print("Zły format pliku!!")
+            print(tname+" - Zły format pliku!!")
         except FileNotFoundError:
-            print("Podfolder w podfolderze!!")
+            print(tname+" - Podfolder w podfolderze!!")
         k = 0
         while k < len(tlist):
             tfile.write(tlist[k]+"\n") #wpisanie narzędzi do plików
