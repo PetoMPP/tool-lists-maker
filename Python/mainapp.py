@@ -52,6 +52,7 @@ def main():
                 print(str(i) + " - " + NCfiles[i])
                 i += 1
             sel = int(input("\nWybór (0, 1, 2, etc...):"))
+            start_time = time.time()
             NCpath = mdfdir + "/" + NCfiles[sel]
             #NCpath = "Python/" + input("Podaj nazwę pliku: ")
             NCprogram = ""
@@ -73,6 +74,7 @@ def main():
             tdmsql.tdmAddTools(listID, tlist)
             tdmsql.tdmAddLogfile
             tdmsql.tdmDisconnect(cnxn)
+            print("Stworzenie listy zajęło %s sekund!" % (start_time - time.time()))
             break
         else:
             print("Podaj poprawną wartość!")
