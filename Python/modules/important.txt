@@ -1,0 +1,5 @@
+# register the SQL Server database DSN information in ~/.odbc.ini
+odbcinst -i -s -f /path/to/your/temporary/dsn/file -h
+
+# check the DSN installation with:
+cat ~/.odbc.ini   # should contain a section called [MSSQLServerDatabase]

@@ -17,6 +17,21 @@ def fileTlist(path):
     tlist.sort()
     return tlist
 
+#Stworzenie listy numerów T z ogranicznikiem czytanych wierszy
+def fileTlistLimited(path, limit):
+    ncprg = open(path)
+    tlist = []
+    i = 0
+    for line in ncprg.readlines():
+        while i < limit:
+            tlist.extend(findTnums(line))
+            i += 1
+    tlist = set(tlist)
+    tlist = list(tlist)
+    tlist.sort()
+    return tlist
+
+
 #Stworzenie listy narzędzi z pliku nazwa po pliku (Nie działa)
 def dirTlist(NCP,path):
     ncprg = open(path+NCP)
