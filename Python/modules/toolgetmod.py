@@ -4,6 +4,18 @@ import re
 def findTnums(line):
     TNumRegex = re.compile(r'T\d+')
     hits = TNumRegex.findall(line)
+    '''filters = ["r'T\d+'", "r'FZ\d+\D'", "r'W\d"]
+    i = 0
+    hits = []
+    for filter in filters:
+        TNumRegex = re.compile(filters[i])
+        hits = hits + TNumRegex.findall(line)
+        i += 1'''
+    return hits
+
+def findTnumsMDF(line):
+    mdfPattern = re.compile(r'\D\w+')
+    hits = mdfPattern.findall(line)
     return hits
 
 #Stworzenie listy narzędzi z pliku nazwa po pliku (Działa)
@@ -21,11 +33,8 @@ def fileTlist(path):
 def fileTlistLimited(path, limit):
     ncprg = open(path)
     tlist = []
-    i = 0
-    for line in ncprg.readlines():
-        while i < limit:
-            tlist.extend(findTnums(line))
-            i += 1
+    for i, line in zip(range(limit), ncprg.readlines()):
+        tlist.extend(findTnumsMDF(line))
     tlist = set(tlist)
     tlist = list(tlist)
     tlist.sort()

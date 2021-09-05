@@ -61,19 +61,20 @@ def main():
                     NCprogram += char
                 else:
                     break
-            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=testdb;UID=tms;PWD=tms')
-            listID = tdmsql.tdmGetMaxListID(cnxn)
+            #cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=testdb;UID=tms;PWD=tms')
+            #listID = tdmsql.tdmGetMaxListID(cnxn)
             user = getpass.getuser()
             timestamp = round(time.time())
             try:
                 tlist = toolgetmod.fileTlistLimited(NCpath, 100)
+                print(tlist)
             except FileNotFoundError:
                 print("Nie można było znaleźć pliku!")
                 break
-            tdmsql.tdmCreateList(cnxn, NCprogram, listID, user, timestamp)
+            '''tdmsql.tdmCreateList(cnxn, NCprogram, listID, user, timestamp)
             tdmsql.tdmAddTools(listID, tlist)
             tdmsql.tdmAddLogfile
-            tdmsql.tdmDisconnect(cnxn)
+            tdmsql.tdmDisconnect(cnxn)'''
             print("Stworzenie listy zajęło %s sekund!" % (start_time - time.time()))
             break
         else:
