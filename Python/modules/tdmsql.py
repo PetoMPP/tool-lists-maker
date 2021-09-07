@@ -23,7 +23,6 @@ def tdmGetUserName(cnxn, userID):
     lastname = str(cursor.fetchall())
     lastname = re.sub('[^A-Za-z0-9]+', '', lastname)
     username = firstname + " " + lastname
-    print(username)
     return username
 
 def tdmCheckIfToolsExists(cnxn, tlist):
@@ -33,7 +32,6 @@ def tdmCheckIfToolsExists(cnxn, tlist):
         cursor.execute("SELECT TOOLID FROM TDM_TOOL WHERE TOOLID = '%s'" % (tool))
         output = str(cursor.fetchall())
         output = re.sub('[^A-Za-z0-9]+', '', output)
-        print(output)
         if output == "":
             valid = False
     return valid
