@@ -56,26 +56,32 @@ def main():
             NCpath = mdfdir + "/" + NCfiles[sel]
             #NCpath = "Python/" + input("Podaj nazwę pliku: ")
             NCprogram = ""
-            for char in NCpath:
+            for char in NCfiles[sel]:
                 if char != '.':
                     NCprogram += char
                 else:
                     break
-            #cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=localhost;DATABASE=testdb;UID=tms;PWD=tms')
-            #listID = tdmsql.tdmGetMaxListID(cnxn)
+            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMPROD;UID=tms;PWD=tms')
+            listID = tdmsql.tdmGetMaxListID(cnxn)
             user = getpass.getuser()
+            user = user.upper()
             timestamp = round(time.time())
+            username = tdmsql.tdmGetUserName(cnxn, user)
             try:
                 tlist = toolgetmod.fileTlistLimited(NCpath, 100)
-                print(tlist)
             except FileNotFoundError:
                 print("Nie można było znaleźć pliku!")
                 break
-            '''tdmsql.tdmCreateList(cnxn, NCprogram, listID, user, timestamp)
-            tdmsql.tdmAddTools(listID, tlist)
-            tdmsql.tdmAddLogfile
-            tdmsql.tdmDisconnect(cnxn)'''
-            print("Stworzenie listy zajęło %s sekund!" % (start_time - time.time()))
+            validTools = tdmsql.tdmCheckIfToolsExists(cnxn, tlist)
+            if validTools:
+                tdmsql.tdmCreateList(cnxn, NCprogram, listID, username, timestamp)
+                tdmsql.tdmAddTools(cnxn, listID, tlist, timestamp)
+                tdmsql.tdmAddLogfile(cnxn, listID, user, timestamp)
+                tdmsql.tdmDisconnect(cnxn)
+                print("Stworzenie listy zajęło %s sekund!" % (start_time - time.time()))
+            else:
+                print("Program zawiera narzędzia, których nie ma w TDM!")
+            input("Naciśnij ENTER aby zamknąć okno")
             break
         else:
             print("Podaj poprawną wartość!")
