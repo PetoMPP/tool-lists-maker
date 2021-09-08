@@ -1,3 +1,4 @@
+from os import path
 import time, pyodbc, getpass, os.path
 from modules import dirmod, toolgetmod, tdmsql
 
@@ -51,17 +52,31 @@ def main():
             for file in NCfiles:
                 print(str(i) + " - " + NCfiles[i])
                 i += 1
-            sel = int(input("\nWybór (0, 1, 2, etc...):"))
+            while True:
+                try:
+                    sel = int(input("\nWybór (0, 1, 2, etc...):"))
+                    NCpath = mdfdir + "/" + NCfiles[sel]
+                    break
+                except IndexError:
+                    print("Podaj poprawną wartość!")
+                except ValueError:
+                    print("Podaj poprawną wartość!")
+            print("Program rozpoczyna pracę")
             start_time = time.time()
-            NCpath = mdfdir + "/" + NCfiles[sel]
-            #NCpath = "Python/" + input("Podaj nazwę pliku: ")
             NCprogram = ""
             for char in NCfiles[sel]:
                 if char != '.':
                     NCprogram += char
                 else:
                     break
-            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMPROD;UID=tms;PWD=tms')
+            try:
+                print("Łączenie z bazą danych TDM...")
+                cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMPROD;UID=tms;PWD=tms')
+                print("Połączono!")
+            except pyodbc.OperationalError:
+                print("Brak połączenia z bazą TDM!")
+                input("Naciśnij ENTER aby zamknąć okno")
+                break
             listID = tdmsql.tdmGetMaxListID(cnxn)
             user = getpass.getuser()
             user = user.upper()
