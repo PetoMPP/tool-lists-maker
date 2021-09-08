@@ -13,9 +13,9 @@ def findTnums(line):
         i += 1'''
     return hits
 
-def findTnumsMDF(line):
-    mdfPattern = re.compile(r'\D\w+')
-    hits = mdfPattern.findall(line)
+def findTnumsMPF(line):
+    mpfPattern = re.compile(r'\D\w+')
+    hits = mpfPattern.findall(line)
     return hits
 
 #Stworzenie listy narzędzi z pliku nazwa po pliku (Działa)
@@ -34,7 +34,7 @@ def fileTlistLimited(path, limit):
     ncprg = open(path)
     tlist = []
     for i, line in zip(range(limit), ncprg.readlines()):
-        tlist.extend(findTnumsMDF(line))
+        tlist.extend(findTnumsMPF(line))
     tlist = set(tlist)
     tlist = list(tlist)
     tlist.sort()

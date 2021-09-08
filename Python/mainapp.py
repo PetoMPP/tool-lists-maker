@@ -7,7 +7,7 @@ def main():
     while True:
         while True:
             try:
-                mode_sel=int(input("Wybierz tryb działania:\n(1)Tworzenie plików tekstowych z programów z Shopturna;\n(2)Stworznie listy narzędziowej w TDM z pliku MDF.\n:"))
+                mode_sel=int(input("Wybierz tryb działania:\n(1)Tworzenie plików tekstowych z programów z Shopturna;\n(2)Stworznie listy narzędziowej w TDM z pliku MPF.\n:"))
                 break
             except ValueError:
                 print("Podaj poprawną wartość!")
@@ -45,9 +45,9 @@ def main():
             print("-done in %s seconds-" % (time.time() - start_time))
             break
         elif mode_sel == 2:
-            mdfdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/Folder na pliki mdf"
-            NCfiles = dirmod.getfiles(mdfdir)
-            print("Wybierz plik MDF, z którego chcesz stworzyć listę narzędziową w TDM:\n")
+            mpfdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/Folder na pliki mpf"
+            NCfiles = dirmod.getfiles(mpfdir)
+            print("Wybierz plik MPF, z którego chcesz stworzyć listę narzędziową w TDM:\n")
             i = 0
             for file in NCfiles:
                 print(str(i) + " - " + NCfiles[i])
@@ -55,7 +55,7 @@ def main():
             while True:
                 try:
                     sel = int(input("\nWybór (0, 1, 2, etc...):"))
-                    NCpath = mdfdir + "/" + NCfiles[sel]
+                    NCpath = mpfdir + "/" + NCfiles[sel]
                     break
                 except IndexError:
                     print("Podaj poprawną wartość!")
