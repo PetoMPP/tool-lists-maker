@@ -101,18 +101,19 @@ def main():
             break
         elif mode_sel == 3:
             fusiondir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/fusion"
+            fusion_dirs = dirmod.getDir(fusiondir)
             fusion_files = dirmod.getfiles(fusiondir)
             while True:
-                print("Wszystkie pliki w folderze fusion zostaną dodane do TDM!")
-                print("Aby wyświetlić listę plików, które zostaną dodane/usuniętę napisz \"pliki\"")
+                print("Wszystkie foldery w folderze fusion zostaną dodane do TDM!")
+                print("Aby wyświetlić listę folderów, które zostaną dodane/usuniętę napisz \"foldery\"")
                 print("Aby usunąć listy na podstawie nazw plików napisz \"purge\"")
                 print("Aby utworzyć plik z listą narzędzi, których nie można łatwo odnaleźć w TDM wpisz \"braki\"")
                 print("Aby dodać listy narzędziow do TDM napisz \"kasjan to chuj\"")
                 bsel = input(":")
-                if bsel == "pliki":
+                if bsel == "foldery":
                     print("\n")
-                    for file in fusion_files:
-                        print(file)
+                    for dir in fusion_dirs:
+                        print(dir)
                     print("\n")
                     input("Kontynuuj enterem...")
                 elif bsel == "braki":
@@ -139,9 +140,9 @@ def main():
                     input("Kontynuuj enterem...")
                 elif bsel == "purge":
                     NCprogram_list = []
-                    for file in fusion_files:
+                    for dir in fusion_dirs:
                         NCprogram = ""
-                        for char in file:
+                        for char in dir:
                             if char != '.':
                                 NCprogram += char
                             else:
@@ -183,41 +184,44 @@ def main():
                     input("Kontynuuj enterem...")
                 elif bsel == "kasjan to chuj":
                     start_time = time.time()
-                    for file in fusion_files:
-                        NCprogram = ""
-                        for char in file:
+                    try:
+                        print("Łączenie z bazą danych TDM...")
+                        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMTEST;UID=tms;PWD=tms')
+                        print("Połączono!")
+                    except pyodbc.OperationalError:
+                        print("Brak połączenia z bazą TDM!")
+                        input("Naciśnij ENTER aby zamknąć okno")
+                        break
+                    for dir in fusion_dirs:
+                        NCprogram = dir
+                        '''for char in dir:
                             if char != '.':
                                 NCprogram += char
                             else:
-                                break
-                        try:
-                            print("Łączenie z bazą danych TDM...")
-                            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMTEST;UID=tms;PWD=tms')
-                            print("Połączono!")
-                        except pyodbc.OperationalError:
-                            print("Brak połączenia z bazą TDM!")
-                            input("Naciśnij ENTER aby zamknąć okno")
-                            break
+                                break'''
                         listID = tdmsql.tdmGetMaxListID(cnxn)
                         user = getpass.getuser()
                         user = user.upper()
                         timestamp = round(time.time())
                         username = tdmsql.tdmGetUserName(cnxn, user)
-                        dirty_list = toolgetmod.fileTlistFUSION(fusiondir + "\\" + file)
-                        d2list = []
-                        for ele in dirty_list:
-                            d2list.append(toolgetmod.clearFUSION(ele))
-                        clist = tdmsql.tdmGetCompsID(cnxn, d2list)
+                        for file in dir:
+                            dirty_list = toolgetmod.fileTlistFUSION(fusiondir + "\\" + dir + "\\" + file)
+                            d2list = []
+                            for ele in dirty_list:
+                                d2list.append(toolgetmod.clearFUSION(ele))
+                            clist = tdmsql.tdmGetCompsID(cnxn, d2list)
                         validComps = tdmsql.tdmCheckIfCompExists(cnxn, clist)
                         if validComps:
                             tdmsql.tdmCreateList(cnxn, NCprogram, listID, username, timestamp)
                             tdmsql.tdmAddTools(cnxn, listID, clist, timestamp)
                             tdmsql.tdmAddLogfile(cnxn, listID, user, timestamp)
                             tdmsql.tdmDisconnect(cnxn)
-                            print("Stworzenie listy zajęło %s sekund!" % (start_time - time.time()))
                         else:
                             print("Program zawiera narzędzia, których nie ma w TDM!")
-                        input("Naciśnij ENTER aby zamknąć okno")
+                            input("Naciśnij ENTER aby zamknąć okno")
+                    print("Stworzenie list zajęło %s sekund!" % (start_time - time.time()))
+                    print("Dziękuję za wspólną zabawę!")
+                    input("Wciśnij ENTER, żeby kontynuować")
                 else:
                     print("Spróbuj jeszcze raz")
                     input("Kontynuuj enterem...")
