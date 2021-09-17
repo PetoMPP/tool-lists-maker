@@ -7,7 +7,7 @@ def main():
     while True:
         while True:
             try:
-                mode_sel=int(input("Wybierz tryb działania:\n(1)Tworzenie plików tekstowych z programów z Shopturna;\n(2)Stworznie listy narzędziowej w TDM z pliku MPF.\n:"))
+                mode_sel=int(input("Wybierz tryb działania:\n(1)Tworzenie plików tekstowych z programów z Shopturna;\n(2)Stworznie listy narzędziowej w TDM z pliku MPF;\n(3)Masowe dodawanie list narzędziowych na datrona:"))
                 break
             except ValueError:
                 print("Podaj poprawną wartość!")
@@ -47,6 +47,7 @@ def main():
         elif mode_sel == 2:
             mpfdir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/Folder na pliki mpf"
             NCfiles = dirmod.getfiles(mpfdir)
+            print(mpfdir)
             print("Wybierz plik MPF, z którego chcesz stworzyć listę narzędziową w TDM:\n")
             i = 0
             for file in NCfiles:
@@ -98,6 +99,129 @@ def main():
                 print("Program zawiera narzędzia, których nie ma w TDM!")
             input("Naciśnij ENTER aby zamknąć okno")
             break
+        elif mode_sel == 3:
+            fusiondir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/fusion"
+            fusion_files = dirmod.getfiles(fusiondir)
+            while True:
+                print("Wszystkie pliki w folderze fusion zostaną dodane do TDM!")
+                print("Aby wyświetlić listę plików, które zostaną dodane/usuniętę napisz \"pliki\"")
+                print("Aby usunąć listy na podstawie nazw plików napisz \"purge\"")
+                print("Aby utworzyć plik z listą narzędzi, których nie można łatwo odnaleźć w TDM wpisz \"braki\"")
+                print("Aby dodać listy narzędziow do TDM napisz \"kasjan to chuj\"")
+                bsel = input(":")
+                if bsel == "pliki":
+                    print("\n")
+                    for file in fusion_files:
+                        print(file)
+                    print("\n")
+                    input("Kontynuuj enterem...")
+                elif bsel == "braki":
+                    try:
+                        print("Łączenie z bazą danych TDM...")
+                        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMTEST;UID=tms;PWD=tms')
+                        print("Połączono!")
+                    except pyodbc.OperationalError:
+                        print("Brak połączenia z bazą TDM!")
+                        input("Naciśnij ENTER aby zamknąć okno")
+                        break
+                    mega_list = []
+                    for file in fusion_files:
+                        tlist = toolgetmod.fileTlistFUSION(fusiondir + "/" + file)
+                        for ele in tlist:
+                            mega_list.append(toolgetmod.clearFUSION(ele))
+                    creation_time = round(time.time())
+                    err_list = tdmsql.tdmFindInvalidComps(cnxn, mega_list)
+                    err_file = open(os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "Lista narzędzi do dodania" + str(creation_time), 'a')
+                    err_file.write("Lista narzędzi do poprawienia:\n")
+                    for ele in err_list:
+                        err_file.write(str(ele) + "\n")
+                    print("lista narzędzi została zapisana w głównym katalogu programu pod nazwą: " + str(creation_time))                    
+                    input("Kontynuuj enterem...")
+                elif bsel == "purge":
+                    NCprogram_list = []
+                    for file in fusion_files:
+                        NCprogram = ""
+                        for char in file:
+                            if char != '.':
+                                NCprogram += char
+                            else:
+                                break
+                        NCprogram_list.append(NCprogram)
+                    print(NCprogram_list)
+                    print("Listy z powyższymi numerami zostaną usunięte z TDM")
+                    conf = input("Aby kontynuować wpisz \"PURGE\"\n:")
+                    if conf == "PURGE":
+                        try:
+                            print("Łączenie z bazą danych TDM...")
+                            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMPROD;UID=tms;PWD=tms')
+                            print("Połączono!")
+                        except pyodbc.OperationalError:
+                            print("Brak połączenia z bazą TDM!")
+                            input("Naciśnij ENTER aby zamknąć okno")
+                            break
+                        count = 0
+                        for prog in NCprogram_list:
+                            if tdmsql.tdmListCheckbyNC(cnxn, prog):
+                                tdmsql.tdmDeleteListbyNC(cnxn, prog)
+                                count += 1
+                            else:
+                                print("Nie znaleziono listy o numerze operacji %s" % (str(prog)))
+                        if count == 0:
+                            print("Nie usunięto żadnej listy")
+                        elif count == 1:
+                            print("Usunięto %d listę" % (count))
+                        elif count % 10 < 5:
+                            print("Usunięto %d listy" % (count))
+                        elif count % 10 >= 5:
+                            print("Usunięto %d list" % (count))                            
+                    else:
+                        print("Do zobaczenia!")
+                        input("Kontynuuj enterem...")
+
+                elif bsel == "Kasjan to chuj":
+                    print("kasjan z dużej? nie przejdzie..")
+                    input("Kontynuuj enterem...")
+                elif bsel == "kasjan to chuj":
+                    start_time = time.time()
+                    for file in fusion_files:
+                        NCprogram = ""
+                        for char in file:
+                            if char != '.':
+                                NCprogram += char
+                            else:
+                                break
+                        try:
+                            print("Łączenie z bazą danych TDM...")
+                            cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER=uhlplvm03;DATABASE=TDMTEST;UID=tms;PWD=tms')
+                            print("Połączono!")
+                        except pyodbc.OperationalError:
+                            print("Brak połączenia z bazą TDM!")
+                            input("Naciśnij ENTER aby zamknąć okno")
+                            break
+                        listID = tdmsql.tdmGetMaxListID(cnxn)
+                        user = getpass.getuser()
+                        user = user.upper()
+                        timestamp = round(time.time())
+                        username = tdmsql.tdmGetUserName(cnxn, user)
+                        dirty_list = toolgetmod.fileTlistFUSION(fusiondir + "\\" + file)
+                        d2list = []
+                        for ele in dirty_list:
+                            d2list.append(toolgetmod.clearFUSION(ele))
+                        clist = tdmsql.tdmGetCompsID(cnxn, d2list)
+                        validComps = tdmsql.tdmCheckIfCompExists(cnxn, clist)
+                        if validComps:
+                            tdmsql.tdmCreateList(cnxn, NCprogram, listID, username, timestamp)
+                            tdmsql.tdmAddTools(cnxn, listID, clist, timestamp)
+                            tdmsql.tdmAddLogfile(cnxn, listID, user, timestamp)
+                            tdmsql.tdmDisconnect(cnxn)
+                            print("Stworzenie listy zajęło %s sekund!" % (start_time - time.time()))
+                        else:
+                            print("Program zawiera narzędzia, których nie ma w TDM!")
+                        input("Naciśnij ENTER aby zamknąć okno")
+                else:
+                    print("Spróbuj jeszcze raz")
+                    input("Kontynuuj enterem...")
+
         else:
             print("Podaj poprawną wartość!")
     

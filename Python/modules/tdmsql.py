@@ -25,6 +25,18 @@ def tdmGetUserName(cnxn, userID):
     username = firstname + " " + lastname
     return username
 
+
+def tdmGetCompsID(cnxn, d2list):
+    cursor = cnxn.cursor()
+    clist = []
+    for d2 in d2list:
+        cursor.execute("SELECT [COMPID] FROM TDM_COMP WHERE USERNAME = '%s'" % (d2))
+        compid = str(cursor.fetchall())
+        compid = re.sub('[^A-Za-z0-9]+', '', compid)
+        clist.append(compid)
+
+
+
 def tdmCheckIfToolsExists(cnxn, tlist):
     valid = True
     cursor = cnxn.cursor()
@@ -36,12 +48,52 @@ def tdmCheckIfToolsExists(cnxn, tlist):
             valid = False
     return valid
 
+def tdmCheckIfCompExists(cnxn, tlist):
+    valid = True
+    cursor = cnxn.cursor()
+    for tool in tlist:
+        cursor.execute("SELECT TOOLID FROM TDM_COMP WHERE TOOLID = '%s'" % (tool))
+        output = str(cursor.fetchall())
+        output = re.sub('[^A-Za-z0-9]+', '', output)
+        if output == "":
+            valid = False
+    return valid
+
+def tdmFindInvalidComps(cnxn, tlist):
+    cursor = cnxn.cursor()
+    inv_comps = []
+    for comp in tlist:
+        cursor.execute("SELECT TOOLID FROM TDM_COMP WHERE TOOLID = '%s'" % (comp))
+        output = str(cursor.fetchall())
+        output = re.sub('[^A-Za-z0-9]+', '', output)
+        if output == "":
+            inv_comps.append(comp)
+    inv_comps = list(set(inv_comps))
+    return inv_comps
+
+
+def tdmListCheckbyNC(cnxn, NCprogram):
+    cursor = cnxn.cursor()
+    cursor.execute("SELECT LISTID FROM TDM_LIST WHERE NCPROGRAM = '%s'" % (NCprogram))
+    output = str(cursor.fetchall())
+    output = re.sub('[^A-Za-z0-9]+', '', output)
+    if output == "":
+        return False
+    else:
+        return True
+
 
 def tdmCreateList(cnxn, NCprogram, maxid, user, timestamp):
     cursor = cnxn.cursor()
     #cursor.execute("insert into TDM_LIST (TIMESTAMP, LISTID, NCPROGRAM, PARTNAME, PARTNAME01, WORKPIECEDRAWING, JOBPLAN, WORKPROCESS, MATERIALID, MACHINEID, MACHINEGROUPID, FIXTURE, NOTE, NOTE01, WORKPIECECLASSID, STATEID1, STATEID2, LISTTYPE, USERNAME, ACCESSCODE) values (1628337607, N'0002712', N'5555555', null, null, null, null, null, null, null, null, null, null, null, null, N'TOOL LIST IS PREPARING', null, 2, null, null)")
     cursor.execute("insert into TDM_LIST (TIMESTAMP, LISTID, NCPROGRAM, PARTNAME, PARTNAME01, WORKPIECEDRAWING, JOBPLAN, WORKPROCESS, MATERIALID, MACHINEID, MACHINEGROUPID, FIXTURE, NOTE, NOTE01, WORKPIECECLASSID, STATEID1, STATEID2, LISTTYPE, USERNAME, ACCESSCODE) values (%d, N'%s', N'%s', null, null, N'%s', null, null, null, null, null, null, null, null, null, N'TOOL LIST IS PREPARING', null, 2, N'%s', null)" % (timestamp, maxid, NCprogram, maxid, user))
     cnxn.commit()
+
+def tdmDeleteListbyNC(cnxn, NCprogram):
+    cursor = cnxn.cursor()
+    cursor.execute("DELETE FROM TDM_LIST WHERE NCPROGRAM = '%s'" % (NCprogram))
+    cnxn.commit()
+
 
 def tdmAddTools(cnxn, listID, tlist, timestamp):
     i = 1
