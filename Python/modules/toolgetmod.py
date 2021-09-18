@@ -23,11 +23,19 @@ def findTnumsFUSION(line):
     hit = mpfPattern.findall(line)
     return hit
 
+
+def findNamesFUSION(line, comp):
+    mpfPattern = re.compile(r'"Name":"\w+"')
+    if re.search(comp, line, re.IGNORECASE) is not None:
+        hit = comp + "    " + mpfPattern.findall(line)[0]
+        return hit
+    return False
+
 def clearFUSION(element):
     toolPattern = re.compile(r'":"\w+')
     element = toolPattern.findall(element)
     element = element[0]
-    element = re.sub('[^A-Za-z0-9]+', '', element)
+    element = re.sub('[^A-Za-z0-9\-]+', '', element)
     element = element.upper()
     return element
 
