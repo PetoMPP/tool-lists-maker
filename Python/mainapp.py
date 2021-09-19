@@ -105,6 +105,7 @@ def main():
             fusiondir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "/fusion"
             fusion_dirs = dirmod.getDir(fusiondir)
             fusion_files = dirmod.getfiles(fusiondir)
+            fusion_programs_dir = "M:\MMLCUBEB"
             d2_dict = {
                 "8000": "435.B-0800-A1-XF H10F DATRON",
                 "0068820B": "0068820E",
@@ -119,7 +120,7 @@ def main():
                 print("Aby wyświetlić listę folderów, które zostaną dodane/usuniętę napisz \"foldery\"")
                 print("Aby usunąć listy na podstawie nazw plików napisz \"purge\"")
                 print("Aby utworzyć plik z listą narzędzi, których nie można łatwo odnaleźć w TDM wpisz \"braki\"")
-                print("Aby zaciągnąć foldery do folderu fusion napisz \"zbierz\"")
+                print("Aby zaciągnąć foldery z \"M:\MMLCUBEB\" do folderu fusion napisz \"zbierz\"")
                 print("Aby zaciągnąć wszystkie foldery z \"M:\MMLCUBEB\" do folderu fusion napisz \"zbierz wszystko\"")
                 print("Aby przekonwertować listy zaciągnięte do fusion raw na mocowania napisz \"konwertuj\"")
                 print("Aby dodać listy narzędziow do TDM napisz \"kasjan to chuj\"")
@@ -270,18 +271,26 @@ def main():
                     print("Dziękuję za wspólną zabawę!")
                     input("Wciśnij ENTER, żeby kontynuować")
                 elif bsel == "zbierz":
-                    fusion_programs_dir = "M:\MMLCUBEB"
                     while True:
                         try:
                             sel_dir = input("Wpisz numer programu\n:")
                             src_dir = fusion_programs_dir + "//" + sel_dir
                             trg_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\" + "fusion raw" + "\\" + sel_dir
                             copy_tree(src_dir, trg_dir)
+                            print("Przeniesiono!")
                             break
                         except distutils.errors.DistutilsFileError:
                             print("Spróbuj jeszcze raz")
                 elif bsel == "zbierz wszystko":
-                    pass
+                    while True:
+                        try:
+                            src_dir = fusion_programs_dir
+                            trg_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\" + "fusion raw"
+                            copy_tree(src_dir, trg_dir)
+                            print("Przeniesiono!")
+                            break
+                        except distutils.errors.DistutilsFileError:
+                            print("Spróbuj jeszcze raz")
                 elif bsel == "konwertuj":
                     pass
                 else:

@@ -1,4 +1,5 @@
 import re
+from typing import Pattern
 
 #Przechwycenie nr T (Działa)
 def findTnums(line):
@@ -83,3 +84,11 @@ def dirTlist(NCP,path):
     tlist = list(tlist)
     tlist.sort()
     return tlist
+
+def getsuffix(str):
+    pattern1 = re.compile(r'_\d+')
+    str = pattern1.findall(str)
+    str = str[0]
+    result = ""
+    for char in zip(range(4)):
+        result = result + char
