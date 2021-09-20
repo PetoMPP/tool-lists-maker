@@ -260,7 +260,7 @@ def main():
                             clist = list(set(clist))
                             print(clist)
                             if clist[0] != '':
-                                tdmsql.tdmCreateList(cnxn, NCprogram, listID, username, timestamp)
+                                tdmsql.tdmCreateListMLCUBE(cnxn, NCprogram, listID, username, timestamp)
                                 tdmsql.tdmAddComps(cnxn, listID, clist, timestamp)
                                 tdmsql.tdmAddLogfile(cnxn, listID, user, timestamp)
                                 tdmsql.tdmDisconnect(cnxn)
