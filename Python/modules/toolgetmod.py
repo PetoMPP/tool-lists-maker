@@ -86,9 +86,14 @@ def dirTlist(NCP,path):
     return tlist
 
 def getsuffix(str):
-    pattern1 = re.compile(r'_\d+')
+    pattern1 = re.compile(r'_\w+')
     str = pattern1.findall(str)
-    str = str[0]
+    try:
+        str = str[0]
+    except IndexError:
+        result = "_000"
+        return result
     result = ""
-    for char in zip(range(4)):
+    for char in str:
         result = result + char
+    return result

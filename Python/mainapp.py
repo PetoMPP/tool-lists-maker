@@ -106,6 +106,7 @@ def main():
             fusion_dirs = dirmod.getDir(fusiondir)
             fusion_files = dirmod.getfiles(fusiondir)
             fusion_programs_dir = "M:\MMLCUBEB"
+            raw_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\" + "fusion raw"
             d2_dict = {
                 "8000": "435.B-0800-A1-XF H10F DATRON",
                 "0068820B": "0068820E",
@@ -274,8 +275,8 @@ def main():
                     while True:
                         try:
                             sel_dir = input("Wpisz numer programu\n:")
-                            src_dir = fusion_programs_dir + "//" + sel_dir
-                            trg_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\" + "fusion raw" + "\\" + sel_dir
+                            src_dir = fusion_programs_dir + "\\" + sel_dir
+                            trg_dir = raw_dir + "\\" + sel_dir
                             copy_tree(src_dir, trg_dir)
                             print("Przeniesiono!")
                             break
@@ -285,14 +286,19 @@ def main():
                     while True:
                         try:
                             src_dir = fusion_programs_dir
-                            trg_dir = os.path.dirname(os.path.dirname(os.path.realpath(__file__))) + "\\" + "fusion raw"
+                            trg_dir = raw_dir
                             copy_tree(src_dir, trg_dir)
                             print("Przeniesiono!")
                             break
                         except distutils.errors.DistutilsFileError:
                             print("Spróbuj jeszcze raz")
                 elif bsel == "konwertuj":
-                    pass
+                    for dir in dirmod.getDir(fusion_programs_dir):
+                        suffix_list = []
+                        for file in dirmod.getfiles(fusion_programs_dir + "\\" + dir):
+                            suffix_list.append(toolgetmod.getsuffix(file))
+                        print(suffix_list)
+
                 else:
                     print("Spróbuj jeszcze raz")
                     input("Kontynuuj enterem...")
