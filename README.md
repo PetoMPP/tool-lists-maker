@@ -1,6 +1,9 @@
 # tool-lists-maker
 Software for analysing the tools used in NC programs and pushing them to TDM database as a Tool List
 
+# This project is abandoned because of Almost TDM being better and with User Interface
+https://github.com/PetoMPP/Almost-TDM
+
 There's much tbd and almost nothing works
 
 The supported file architecture for the software to work is:
